@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // import Loginization from '../Loginization/Loginization.js';
 // import Registration from '../Registration/Registration.js';
