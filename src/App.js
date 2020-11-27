@@ -6,18 +6,28 @@ import Profile from './components/Profile/Profile.js';
 import HabitForm from './components/HabitsList/HabitForm';
 import Container from './components/Shared/Container/Container';
 import Logo from './components/Shared/Logo';
+import Section from './components/Shared/Section';
 
 export default class App extends Component {
   render() {
     return (
-      <Container>
-        <Logo />
-        <Authentification />
+      <>
+        <header>
+          <Container>
+            <Logo />
+          </Container>
+        </header>
+        <main>
+          <Container>
+            <Authentification />
+          </Container>
+        </main>
+        <footer></footer>
         <Loginization />
         <Registration />
         <Profile />
         <HabitForm />
-      </Container>
+      </>
     );
   }
 }
