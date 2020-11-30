@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import HabitItem from './HabitItem';
+import Modal from '../Modal';
+import HabitForm from './HabitForm';
 
 export default class HabitsList extends Component {
-  static propTypes = {
-    prop: PropTypes,
-  };
-
   state = {
     habits: [
       {
@@ -15,15 +13,19 @@ export default class HabitsList extends Component {
         startDate: '',
         progress: '',
       },
+      {
+        id: '2',
+        title: 'Зарядка',
+        startDate: '',
+        progress: '',
+      },
     ],
   };
 
-  toSetProgress = startDate => {
-    // (currDate - StartDate * 100) /21
-    const currendDate = Date.now();
-    const progress =
-      ((currendDate - startDate) * 100) / (21 * 24 * 60 * 60 * 1000);
-    return progress;
+  toAddHabbit = habit => {
+    this.setState(prevState => ({
+      habits: [...prevState.habits, habit],
+    }));
   };
 
   toChangeProgress = id => {
@@ -42,17 +44,23 @@ export default class HabitsList extends Component {
           <div>My accaunt</div>
           <button type="button"></button>
         </header>
+        {this.props.showModal && (
+          <Modal modalToggle={this.props.modalToggle}>
+            <HabitForm
+              modalToggle={this.props.modalToggle}
+              toAddHabbit={this.toAddHabbit}
+            />
+          </Modal>
+        )}
         <div>календарь</div>
         <h1>Мои привычки</h1>
-        {this.state.habits.length ? (
+        {habits.length ? (
           <ul>
             {habits.map(habit => {
               return (
                 <HabitItem
                   key={habit.id}
-                  progress={() => {
-                    this.toChangeProgress(habit.id);
-                  }}
+                  progress={habit.progress}
                   title={habit.title}
                 />
               );
@@ -61,7 +69,9 @@ export default class HabitsList extends Component {
         ) : (
           <p>У вас пока нет привычек...</p>
         )}
-        <button type="button">+</button>
+        <button type="button" onClick={this.props.modalToggle}>
+          +
+        </button>
       </>
     );
   }

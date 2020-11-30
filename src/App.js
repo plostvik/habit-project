@@ -7,8 +7,20 @@ import HabitForm from './components/HabitsList/HabitForm';
 import Container from './components/Shared/Container/Container';
 import Logo from './components/Shared/Logo';
 import Section from './components/Shared/Section';
+import Modal from './components/Modal';
+import HabitList from './components/HabitsList';
 
 export default class App extends Component {
+  state = {
+    showModal: false,
+  };
+
+  modalToggle = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal,
+    }));
+  };
+
   render() {
     return (
       <>
@@ -26,7 +38,10 @@ export default class App extends Component {
         <Loginization />
         <Registration />
         <Profile />
-        <HabitForm />
+        <HabitList
+          modalToggle={this.modalToggle}
+          showModal={this.state.showModal}
+        />
       </>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HabitForm.module.css';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class HabitForm extends Component {
   static propTypes = {};
@@ -13,9 +14,30 @@ export default class HabitForm extends Component {
     remind: true,
   };
 
+  closeId = null;
+
   handleSubmit = event => {
     event.preventDefault();
-    alert(JSON.stringify(this.state, null, 2));
+    const { title, comment, color, remind } = this.state;
+    const habit = {
+      id: uuidv4(),
+      title,
+      comment,
+      color,
+      remind,
+      startDate: Date.now(),
+      progress: this.toSetProgress(Date.now()),
+    };
+    this.props.toAddHabbit(habit);
+    this.setState({
+      title: '',
+      comment: '',
+      repeat: '',
+      color: '#390093',
+      remind: true,
+    });
+    alert(`New habit ${title} added`);
+    this.closeId = setTimeout(this.props.modalToggle, 2000);
   };
 
   handleChange = ({ target }) => {
@@ -23,6 +45,19 @@ export default class HabitForm extends Component {
     this.setState({
       [name]: type === 'checkbox' ? checked : value,
     });
+  };
+
+  componentWillUnmount() {
+    clearTimeout(this.closeId);
+  }
+
+  toSetProgress = startDate => {
+    // (currDate - StartDate * 100) /21
+    const currendDate = Date.now();
+    const progress = Math.round(
+      ((currendDate - startDate) * 100) / (21 * 24 * 60 * 60 * 1000),
+    );
+    return progress;
   };
 
   render() {
@@ -33,7 +68,9 @@ export default class HabitForm extends Component {
           className={styles.header}
           style={{ backgroundColor: this.state.color }}
         >
-          <button type="button">X</button>
+          <button type="button" onClick={this.props.modalToggle}>
+            X
+          </button>
           <h2>Новая привычка</h2>
           <label htmlFor="title"></label>
           <input

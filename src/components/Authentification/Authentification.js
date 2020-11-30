@@ -18,6 +18,7 @@ export default class Authentification extends Component {
   onBtnClick = e => {
     if (e.target.textContent === 'Вход') {
       console.log('логин');
+
       //   return <Loginization />;
     } else {
       console.log('рега');
