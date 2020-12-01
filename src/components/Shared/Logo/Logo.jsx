@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Logo.module.css';
 import logo from '../../../images/logo.png';
+import { NavLink } from 'react-router-dom';
 
 const Logo = props => (
-  <a href="null">
+  <NavLink to="/">
     <img src={logo} alt="logo" className={styles.logo} />
-  </a>
+  </NavLink>
 );
 
 Logo.propTypes = {

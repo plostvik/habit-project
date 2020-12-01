@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Registration.module.css';
+import { NavLink } from 'react-router-dom';
 
 class Registration extends Component {
   state = {
@@ -17,6 +18,9 @@ class Registration extends Component {
   handleSubmit = event => {
     event.preventDefault();
     alert(JSON.stringify(this.state, null, 2));
+    this.props.history.push({
+      pathname: '/profile',
+    });
   };
 
   render() {
@@ -24,7 +28,8 @@ class Registration extends Component {
     return (
       <>
         <div className={styles.header}>
-          <button type="button">Назад</button>
+          {/* <button type="button">Назад</button> */}
+          <NavLink to="/">Назад</NavLink>
         </div>
         <form
           action="submit"
