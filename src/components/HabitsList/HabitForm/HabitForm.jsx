@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HabitForm.module.css';
 import { v4 as uuidv4 } from 'uuid';
+import { connect } from 'react-redux';
 
-export default class HabitForm extends Component {
+class HabitForm extends Component {
   static propTypes = {};
+
+  closeId = null;
 
   state = {
     title: '',
@@ -13,8 +16,6 @@ export default class HabitForm extends Component {
     color: '#390093',
     remind: true,
   };
-
-  closeId = null;
 
   handleSubmit = event => {
     event.preventDefault();
@@ -28,7 +29,8 @@ export default class HabitForm extends Component {
       startDate: Date.now(),
       progress: this.toSetProgress(Date.now()),
     };
-    this.props.toAddHabbit(habit);
+
+    this.props.addHabbit(habit);
     this.setState({
       title: '',
       comment: '',
@@ -114,3 +116,13 @@ export default class HabitForm extends Component {
     );
   }
 }
+
+// const mapDispatchToProps = dispatch => ({
+//   addHabbit: obj => dispatch(habitActions.addHabbit(obj)),
+// });
+
+// const mapStateToProps = ({ user }) => ({
+//   habits: user.habits,
+// });
+
+export default HabitForm;

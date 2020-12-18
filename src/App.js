@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
-import Authentication from './components/Authentication/Authentication.js';
-import Loginization from './components/Loginization/Loginization.js';
-import Registration from './components/Registration/Registration.js';
-import Profile from './components/Profile/Profile.js';
-// import HabitForm from './components/HabitsList/HabitForm';
-import Container from './components/Shared/Container/Container';
-import Logo from './components/Shared/Logo';
-// import Section from './components/Shared/Section';
-// import Modal from './components/Modal';
-import HabitList from './components/HabitsList';
+import React, { Component, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 
-export default class App extends Component {
+import Container from './components/Shared/Container/Container';
+import Logo from './components/Shared/Logo';
+
+import HabitList from './components/HabitsList';
+import AppRoute from './routes.js';
+import ErrorBoundry from './components/ErrorBoundary';
+import HabitProfile from './components/HabitsList/HabitProfile';
+
+// import Context from './context/Context.js';шаг №1
+import UserContext from './context/Context.js';
+
+class App extends Component {
   state = {
     showModal: false,
     user: [
@@ -23,10 +24,6 @@ export default class App extends Component {
     ],
   };
 
-  componentDidMount() {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
   modalToggle = () => {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
@@ -36,37 +33,48 @@ export default class App extends Component {
   render() {
     return (
       <>
-        <header>
+        {/* <Context.Provider value={fetchedUser}> */}
+        <UserContext>
+          <header>
+            <Container>
+              <Logo />
+            </Container>
+          </header>
           <Container>
-            <Logo />
-          </Container>
-        </header>
-        <main>
-          <Container>
-            <Route path="/" exact component={Authentication} />
-            <Route path="/login" exact component={Registration} />
-            <Route path="/register" exact component={Loginization} />
-            <Route path="/profile" exact component={Profile} />
-            <Route
-              path="/profile/habitlist"
-              exact
-              render={props => (
-                <HabitList
-                  {...props}
-                  modalToggle={this.modalToggle}
-                  showModal={this.state.showModal}
+            <ErrorBoundry>
+              <Suspense fallback={<h2>Loading...</h2>}>
+                {AppRoute.map((route, index) => {
+                  return <Route key={index} {...route} />;
+                })}
+                <Route
+                  path="/profile/habitlist"
+                  exact
+                  render={props => (
+                    <HabitList
+                      {...props}
+                      modalToggle={this.modalToggle}
+                      showModal={this.state.showModal}
+                    />
+                  )}
                 />
-              )}
-            />
-            {/* <HabitList
-              modalToggle={this.modalToggle}
-              showModal={this.state.showModal}
-            /> */}
+                <Route
+                  path="/profile/habitlist/:id"
+                  exact
+                  render={props => (
+                    <HabitProfile
+                      {...props}
+                      modalToggle={this.modalToggle}
+                      showModal={this.state.showModal}
+                    />
+                  )}
+                />
+              </Suspense>
+            </ErrorBoundry>
           </Container>
-        </main>
-        {/* 
-        <footer></footer> */}
+        </UserContext>
       </>
     );
   }
 }
+
+export default App;

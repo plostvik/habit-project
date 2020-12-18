@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import styles from './Authentication.module.css';
+import { addUser } from '../../redux/habbits/actions/habitActions';
+import { connect } from 'react-redux';
 
 // import Loginization from '../Loginization/Loginization.js';
 // import Registration from '../Registration/Registration.js';

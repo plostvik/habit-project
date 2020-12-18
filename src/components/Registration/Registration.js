@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styles from './Registration.module.css';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+// import { addUser } from '../../redux/habbits/actions/userActions';
+import { addUserOperation } from '../../redux/habbits/operators/userOperator.js';
+import { getUserId } from '../../redux/habbits/HabbitSelectors/HabbitSelectors.js';
 
 class Registration extends Component {
   state = {
@@ -15,12 +19,20 @@ class Registration extends Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.id !== this.props.id) {
+      const { id, history } = this.props;
+      history.push({
+        pathname: `/profile/${id}`,
+      });
+    }
+  }
+
   handleSubmit = event => {
     event.preventDefault();
-    alert(JSON.stringify(this.state, null, 2));
-    this.props.history.push({
-      pathname: '/profile',
-    });
+    const { name, surname, tel } = this.state;
+    const { addUserOperation } = this.props;
+    addUserOperation(name, surname, tel);
   };
 
   render() {
@@ -65,4 +77,12 @@ class Registration extends Component {
   }
 }
 
-export default Registration;
+const mapStateToProps = state => ({
+  id: getUserId(state),
+});
+
+const mapDispatchToProps = {
+  addUserOperation,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

@@ -2,10 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Profile.module.css';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { updateUserOperation } from '../../redux/habbits/operators/userOperator';
+import {
+  getUserAvatar,
+  getUserHeight,
+  getUserWeight,
+  getUserBirthDate,
+} from '../../redux/habbits/HabbitSelectors/HabbitSelectors';
 
 class Profile extends Component {
   state = {
-    avatar: '',
+    avatar:
+      'https://beautifulmemory.sg/wp-content/uploads/2019/03/default-avatar-profile-icon-vector-18942381.jpg',
     height: '',
     weight: '',
     birthDate: '',
@@ -19,18 +28,14 @@ class Profile extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // updateUserProfile()
-    alert(JSON.stringify(this.state, null, 2));
-    // this.setState({
-    //   avatar: '',
-    //   height: '',
-    //   weight: '',
-    //   birthDate: '',
-    // });
+    const { updateUser } = this.props;
+    const id = this.props.match.params.id;
+    const { avatar, height, weight, birthDate } = this.state;
+    updateUser(id, avatar, height, weight, birthDate);
   };
 
   render() {
-    const { avatar, height, weight, birthDate } = this.state;
+    const { height, weight, birthDate } = this.state;
 
     return (
       <>
@@ -38,12 +43,7 @@ class Profile extends Component {
         <form className={styles.form} onSubmit={this.handleSubmit}>
           <label htmlFor="">
             Сменить фото
-            <input
-              type="file"
-              vlaue={avatar}
-              onChange={this.handleChange}
-              name="avatar"
-            />
+            <input type="file" onChange={this.handleChange} name="avatar" />
           </label>
 
           <label htmlFor="">
@@ -84,4 +84,15 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+  avatar: getUserAvatar(state),
+  height: getUserHeight(state),
+  weight: getUserWeight(state),
+  birthDate: getUserBirthDate(state),
+});
+
+const mapDispatchToProps = {
+  updateUser: updateUserOperation,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

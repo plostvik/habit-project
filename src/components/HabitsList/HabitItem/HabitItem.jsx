@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+// import { Link } from 'react-router-dom';
 
 const HabitItem = ({ title, progress }) => (
   <li>
@@ -8,12 +9,12 @@ const HabitItem = ({ title, progress }) => (
   </li>
 );
 
-HabitItem.propTypes = {
-  // bla: PropTypes.string,
-};
+// HabitItem.propTypes = {
+//   // bla: PropTypes.string,
+// };
 
-HabitItem.defaultProps = {
-  // bla: 'test',
-};
+// HabitItem.defaultProps = {
+//   // bla: 'test',
+// };
 
 export default HabitItem;
